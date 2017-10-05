@@ -1,15 +1,18 @@
 {
     "name": "gmh/tasks-project",
-    "description": "Sample project for using Composer.",
+    "description": "Sample project for using Composer and Packagist.",
     "license": "MIT",
-    "keywords": ["tasks-project"],
+    "keywords": ["tasks-project", "gmh"],
     "authors": [
         {
             "name": "Gary Howard",
-            "email": "garyhowardpctech@yahoo.com"
+            "email": "garyhowardpctech@yahoo.com",
+            "role": "Developer"
         }
     ],
-    "require": {},
+    "require": {
+        "php": ">=7.1.0"
+    },
     "repositories": [
         {
             "type": "package",
