@@ -1,0 +1,21 @@
+{
+    "name": "gmh/tasks-project",
+    "description": "Sample project for using Composer.",
+    "license": "MIT",
+    "keywords": ["tasks-project"],
+    "authors": [
+        {
+            "name": "Gary Howard",
+            "email": "garyhowardpctech@yahoo.com"
+        }
+    ],
+    "require": {},
+    "require-dev": {
+        "phpunit/phpunit": "4.0.*"
+    },
+    "autoload": {
+        "psr-4": {
+            "GMH\\": "src"
+        }
+    }
+}
