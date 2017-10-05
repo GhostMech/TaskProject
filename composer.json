@@ -18,7 +18,7 @@
         {
             "type": "package",
             "package": {
-                "name": "gmh/task-project",
+                "name": "gmh/tasks-project",
                 "version": "dev-master",
                 "source": {
                     "url": "git://github.com/Ghostmech/TaskProject.git",
