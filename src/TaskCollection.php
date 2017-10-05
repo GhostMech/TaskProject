@@ -64,6 +64,12 @@ class TaskCollection implements \Countable
         return $this->pdo->lastInsertId();
     }
 
+    /**
+     * Removes a task from the collection.
+     *
+     * @param integer $id
+     * @return \GMH\Task | null
+     */
     public function removeTask($id)
     {
         if (in_array($id, array_keys($this->tasks))) {
@@ -75,7 +81,13 @@ class TaskCollection implements \Countable
         return;
     }
 
-    private function dbInsert($task)
+    /**
+     * Inserts a task into the database.
+     *
+     * @param \GMH\Task $task
+     * @return void
+     */
+    private function dbInsert(Task $task)
     {
         $sql = "INSERT INTO tasks values(null, :name, :dueDate)";
         $stmt = $this->pdo->prepare($sql);
