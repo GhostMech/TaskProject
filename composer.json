@@ -13,7 +13,8 @@
     ],
     "require": {
         "php": "^7.1",
-        "phpmd/phpmd": "^2.6"
+        "phpmd/phpmd": "^2.6",
+        "nesbot/carbon": "^1.22"
     },
     "repositories": [
         {

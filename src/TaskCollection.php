@@ -3,9 +3,7 @@ namespace GMH;
 
 require_once 'Task.php';
 
-use Exception;
-
-//\set_error_handler(function (){ echo 'There was errorz'; });
+require_once 'DBInsertException.php';
 
 class TaskCollection implements \Countable
 {
@@ -47,8 +45,12 @@ class TaskCollection implements \Countable
      */
     public function addTask(TaskInterface $task)
     {
-        $this->dbInsert($task);
-        return $this;
+        try {
+            $this->dbInsert($task);
+            return $this;
+        } catch (DBInsertException $e) {
+            echo $e->getMessage();
+        }
     }
 
     /**
@@ -61,9 +63,17 @@ class TaskCollection implements \Countable
         return $this->pdo->lastInsertId();
     }
 
+    /**
+     * Remove a task.
+     *
+     * @param integer $id
+     * @return void
+     */
     public function removeTask($id)
     {
-        return $this->removeTaskFromDb($id);
+        $removedTask = $this->removeTaskFromDb($id);
+        $this->getAllTasks();
+        return $removedTask;
     }
 
     /**
@@ -74,23 +84,33 @@ class TaskCollection implements \Countable
      */
     private function removeTaskFromDb($id)
     {
-        $stmt1 = $this->pdo->prepare("SELECT * FROM tasks WHERE id=:id");
-        $stmt1->setFetchMode(\PDO::FETCH_CLASS, '\GMH\Task');
-        $stmt1->execute([':id' => $id]);
-        $removedTask = $stmt1->fetch();
-        
-        $stmt2 = $this->pdo->prepare("DELETE FROM tasks WHERE id=:id");
-        $stmt2->execute([':id' => $id]);
+        try {
+            $stmt1 = $this->pdo->prepare("SELECT id, name, due_date as dueDate FROM tasks WHERE id=:id");
+            $stmt1->setFetchMode(\PDO::FETCH_CLASS, '\GMH\Task');
+            $stmt1->execute([':id' => $id]);
+            $removedTask = $stmt1->fetch();
 
-        return $removedTask;
+            var_dump($removedTask);
+
+            $stmt2 = $this->pdo->prepare("DELETE FROM tasks WHERE id=:id");
+            $stmt2->execute([':id' => $id]);
+            return $removedTask;
+        } catch (\PDOException $e) {
+            echo $e->getMessage();
+        }     
     }
 
     /**
-     * 
+     * Get all of the tasks to be done.
+     *
+     * @return array
      */
     public function getAllTasks()
-    {
-        $sql = 'SELECT * FROM tasks';
+    {   
+        if (isset($this->tasks)) {
+            $this->tasks = [];
+        }
+        $sql = 'SELECT id, name, due_date as dueDate FROM tasks';
         $stmt = $this->pdo->prepare($sql);
         $stmt->setFetchMode(\PDO::FETCH_CLASS, '\GMH\Task');
         $stmt->execute();
