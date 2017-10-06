@@ -16,4 +16,11 @@ interface TaskInterface
      * @return string
      */
     public function getDueDate();
+
+    /**
+     * Get the task's assigned ID.
+     *
+     * @return integer
+     */
+    public function getId();
 }
