@@ -4,6 +4,7 @@ namespace GMH;
 require_once 'TaskInterface.php';
 
 use DateTime;
+use Exception;
 
 class Task implements TaskInterface
 {
@@ -28,6 +29,18 @@ class Task implements TaskInterface
      */
     private $dueDate;
 
+    private function validateString($string)
+    {
+        try {
+            if (! is_string($string)) {
+                throw new Exception('ERROR: Task name must be a string.'); 
+            }
+            return $string;
+        } catch (Exception $e) {
+            echo $e->getMessage();
+        }
+    }
+
     /**
      * Set the task name.
      * Returns the object for method chaining.
@@ -37,8 +50,7 @@ class Task implements TaskInterface
      */
     public function name($taskName)
     {
-        $this->name = $taskName;
-
+        $this->name = $this->validateString($taskName);
         return $this;
     }
 
@@ -51,8 +63,7 @@ class Task implements TaskInterface
      */
     public function dueDate($dateString)
     {
-        $this->dueDate = $dateString;
-
+        $this->dueDate = $this->validateString($dateString);
         return $this;
     }
 

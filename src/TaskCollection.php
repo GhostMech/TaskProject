@@ -21,7 +21,7 @@ class TaskCollection implements \Countable
      */
     private $pdo;
 
-    public function __construct(\PDO $pdo)
+    public function __construct(StorageInterface $storage)
     {
         $this->pdo = $pdo;
     }
@@ -47,6 +47,7 @@ class TaskCollection implements \Countable
     {
         try {
             $this->dbInsert($task);
+            $this->getAllTasks();
             return $this;
         } catch (DBInsertException $e) {
             echo $e->getMessage();
