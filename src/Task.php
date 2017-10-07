@@ -2,6 +2,13 @@
 namespace GMH;
 
 require_once 'TaskInterface.php';
+require_once 'c:/xampp/htdocs/vendor/autoload.php';
+
+//use Carbon\Carbon;
+//$carbon = new Carbon();
+//var_dump($carbon);
+
+use DateTime;
 
 class Task implements TaskInterface
 {
@@ -71,7 +78,11 @@ class Task implements TaskInterface
      */
     public function getDueDate() 
     {
-        return $this->dueDate;
+        //return $this->dueDate;
+        if (class_exists('\Carbon\Carbon')) {
+            return new \Carbon\Carbon($this->dueDate);
+        }
+        return new DateTime($this->dueDate);
     }
 
     /**

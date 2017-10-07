@@ -135,4 +135,10 @@ class TaskCollection implements \Countable
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute([':name' => $task->getName(), ':dueDate' => $task->getDueDate()]);
     }
+
+    public function first()
+    {
+        $tasks = $this->getAllTasks();
+        return array_shift($tasks);
+    }
 }
