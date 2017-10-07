@@ -24,7 +24,7 @@ class Task implements TaskInterface
     /**
      * The due date of the task.
      *
-     * @var [type]
+     * @var string
      */
     private $dueDate;
 
