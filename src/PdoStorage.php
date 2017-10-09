@@ -2,6 +2,7 @@
 namespace GMH;
 
 require_once 'StorageInterface.php';
+require_once 'Task.php';
 
 class PdoStorage implements StorageInterface
 {   
@@ -26,7 +27,11 @@ class PdoStorage implements StorageInterface
 
     public function read($id)
     {
-        //
+        $stmt = $this->pdo->prepare('SELECT id, name, due_date as dueDate FROM tasks WHERE id=:id');
+        $stmt->setFetchMode(\PDO::FETCH_CLASS, \GMH\Task::class);
+        $stmt->execute([':id' => $id]);
+        return $stmt->fetch();
+
     }
 
     public function update($item)

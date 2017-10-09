@@ -2,6 +2,7 @@
 namespace GMH;
 
 require_once 'Collection.php';
+require_once '../vendor/autoload.php';
 
 use GMH\Collection;
 
@@ -72,8 +73,6 @@ class TaskCollection extends Collection implements \Countable
             $stmt1->execute([':id' => $id]);
             $removedTask = $stmt1->fetch();
 
-            var_dump($removedTask);
-
             $stmt2 = $this->pdo->prepare("DELETE FROM tasks WHERE id=:id");
             $stmt2->execute([':id' => $id]);
             return $removedTask;
@@ -116,6 +115,11 @@ class TaskCollection extends Collection implements \Countable
         }
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute([':name' => $task->getName(), ':dueDate' => $task->getDueDate()]);
+    }
+
+    public function getTask($id)
+    {
+        return $this->storage->read($id);
     }
 
 }

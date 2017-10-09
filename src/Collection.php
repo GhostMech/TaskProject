@@ -8,14 +8,14 @@ abstract class Collection
      *
      * @var \GMH\StorageInterface
      */
-    private $storage;
+    protected $storage;
 
     /**
      * The collection of items.
      *
      * @var array
      */
-    private $items = [];
+    protected $items = [];
 
     /**
      * Constructs the storage interface.

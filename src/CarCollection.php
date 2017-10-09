@@ -1,7 +1,7 @@
 <?php
 namespace GMH;
 
-require 'Collection.php';
+require_once 'Collection.php';
 
 class CarCollection extends Collection
 {
