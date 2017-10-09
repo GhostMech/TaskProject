@@ -1,31 +1,12 @@
 <?php
 namespace GMH;
 
-require_once 'Task.php';
+require_once 'Collection.php';
 
-require_once 'DBInsertException.php';
+use GMH\Collection;
 
-class TaskCollection implements \Countable
+class TaskCollection extends Collection implements \Countable
 {
-    /**
-     * All of the \GMH\Task objects.
-     *
-     * @var array
-     */
-    private $tasks = [];
-
-    /**
-     * The PDO connection to the database.
-     *
-     * @var \PDO
-     */
-    private $pdo;
-
-    public function __construct(StorageInterface $storage)
-    {
-        $this->pdo = $pdo;
-    }
-
     /**
      * Returns the number of tasks.
      *
@@ -137,9 +118,4 @@ class TaskCollection implements \Countable
         $stmt->execute([':name' => $task->getName(), ':dueDate' => $task->getDueDate()]);
     }
 
-    public function first()
-    {
-        $tasks = $this->getAllTasks();
-        return array_shift($tasks);
-    }
 }
