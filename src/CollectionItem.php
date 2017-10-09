@@ -19,6 +19,13 @@ abstract class CollectionItem
      */
     protected $name;
 
+    public function __construct()
+    {
+        if (isset($this->id)) {
+            $this->id = (int)$this->id;
+        }
+    }
+
     /**
      * Checks that variable type is a string.
      *
@@ -78,6 +85,6 @@ abstract class CollectionItem
      */
     public function getId()
     {
-        return $this->id;
+        return (int)$this->id;
     }
 }

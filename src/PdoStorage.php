@@ -22,7 +22,10 @@ class PdoStorage implements StorageInterface
 
     public function create($item)
     {
-        //
+        $stmt = $this->pdo->prepare('REPLACE INTO tasks values(null, :name, :due_date)');
+        $stmt->execute([':name' => $item->getName(), ':due_date' => $item->getDueDate()]);
+
+        return $this->pdo->lastInsertId();
     }
 
     public function read($id)
@@ -41,6 +44,19 @@ class PdoStorage implements StorageInterface
 
     public function delete($id)
     {
-        //
+        $removedItem = $this->read($id);
+        $stmt = $this->pdo->prepare('DELETE FROM tasks WHERE id=:id limit 1');
+        $stmt->execute([':id' => $id]);
+
+        return $removedItem;
+    }
+
+    public function all()
+    {
+        $stmt = $this->pdo->prepare('SELECT id, name, due_date as dueDate FROM tasks');
+        $stmt->setFetchMode(\PDO::FETCH_CLASS, '\GMH\Task');
+        $stmt->execute();
+
+        return $stmt->fetchAll();
     }
 }
