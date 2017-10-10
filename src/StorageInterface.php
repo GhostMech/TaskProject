@@ -7,7 +7,7 @@ interface StorageInterface
      * Create a resource to store.
      *
      * @param mixed $item
-     * @return void
+     * @return boolean
      */
     public function create($item);
 
@@ -15,7 +15,7 @@ interface StorageInterface
      * Return a resource from storage.
      *
      * @param integer $id
-     * @return void
+     * @return mixed
      */
     public function read($id);
 
@@ -23,7 +23,7 @@ interface StorageInterface
      * Update a stored resource.
      *
      * @param mixed $item
-     * @return void
+     * @return boolean
      */
     public function update($item);
 
@@ -31,7 +31,7 @@ interface StorageInterface
      * Delete a stored resource.
      *
      * @param integer $id
-     * @return void
+     * @return boolean
      */
     public function delete($id);
 }
