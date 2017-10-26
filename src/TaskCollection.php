@@ -1,4 +1,5 @@
 <?php
+
 namespace GMH;
 
 require_once 'Task.php';
@@ -29,7 +30,7 @@ class TaskCollection implements \Countable
     /**
      * Returns the number of tasks.
      *
-     * @return integer
+     * @return int
      */
     public function count()
     {
@@ -41,12 +42,14 @@ class TaskCollection implements \Countable
      * Returns the object for method chaining.
      *
      * @param TaskInterface $task
+     *
      * @return \GMH\TaskCollection
      */
     public function addTask(TaskInterface $task)
     {
         try {
             $this->dbInsert($task);
+
             return $this;
         } catch (DBInsertException $e) {
             echo $e->getMessage();
@@ -66,13 +69,15 @@ class TaskCollection implements \Countable
     /**
      * Remove a task.
      *
-     * @param integer $id
+     * @param int $id
+     *
      * @return void
      */
     public function removeTask($id)
     {
         $removedTask = $this->removeTaskFromDb($id);
         $this->getAllTasks();
+
         return $removedTask;
     }
 
@@ -80,24 +85,26 @@ class TaskCollection implements \Countable
      * Removes a task from the database.
      *
      * @param mixed $id
+     *
      * @return void
      */
     private function removeTaskFromDb($id)
     {
         try {
-            $stmt1 = $this->pdo->prepare("SELECT id, name, due_date as dueDate FROM tasks WHERE id=:id");
+            $stmt1 = $this->pdo->prepare('SELECT id, name, due_date as dueDate FROM tasks WHERE id=:id');
             $stmt1->setFetchMode(\PDO::FETCH_CLASS, '\GMH\Task');
             $stmt1->execute([':id' => $id]);
             $removedTask = $stmt1->fetch();
 
             var_dump($removedTask);
 
-            $stmt2 = $this->pdo->prepare("DELETE FROM tasks WHERE id=:id");
+            $stmt2 = $this->pdo->prepare('DELETE FROM tasks WHERE id=:id');
             $stmt2->execute([':id' => $id]);
+
             return $removedTask;
         } catch (\PDOException $e) {
             echo $e->getMessage();
-        }     
+        }
     }
 
     /**
@@ -106,7 +113,7 @@ class TaskCollection implements \Countable
      * @return array
      */
     public function getAllTasks()
-    {   
+    {
         if (isset($this->tasks)) {
             $this->tasks = [];
         }
@@ -118,6 +125,7 @@ class TaskCollection implements \Countable
         while ($task = $stmt->fetch()) {
             $this->tasks[] = $task;
         }
+
         return $this->tasks;
     }
 
@@ -125,12 +133,13 @@ class TaskCollection implements \Countable
      * Inserts a task into the database.
      *
      * @param \GMH\Task $task
+     *
      * @return void
      */
     private function dbInsert(Task $task)
     {
         if (is_null($task->getId())) {
-            $sql = "INSERT INTO tasks values(null, :name, :dueDate)";
+            $sql = 'INSERT INTO tasks values(null, :name, :dueDate)';
         }
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute([':name' => $task->getName(), ':dueDate' => $task->getDueDate()]);

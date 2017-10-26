@@ -1,4 +1,5 @@
 <?php
+
 namespace GMH;
 
 require_once 'TaskInterface.php';
@@ -31,6 +32,7 @@ class Task implements TaskInterface
      * Returns the object for method chaining.
      *
      * @param string $taskName
+     *
      * @return \GMH\Task
      */
     public function name($taskName)
@@ -45,6 +47,7 @@ class Task implements TaskInterface
      * Returns the object for method chaining.
      *
      * @param string $dateString
+     *
      * @return \GMH\Task
      */
     public function dueDate($dateString)
@@ -69,7 +72,7 @@ class Task implements TaskInterface
      *
      * @return string
      */
-    public function getDueDate() 
+    public function getDueDate()
     {
         return $this->dueDate;
     }
@@ -77,7 +80,7 @@ class Task implements TaskInterface
     /**
      * Gets the task id number.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -88,10 +91,11 @@ class Task implements TaskInterface
      * Sets the task id number.
      *
      * @param string $id
+     *
      * @return void
      */
     public function setId($id)
     {
-        $this->id = (int)$id;
+        $this->id = (int) $id;
     }
 }

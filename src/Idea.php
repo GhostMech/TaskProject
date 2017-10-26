@@ -1,4 +1,5 @@
 <?php
+
 namespace GMH;
 
 class Idea
@@ -13,7 +14,7 @@ class Idea
     /**
      * The number of the idea.
      *
-     * @var integer
+     * @var int
      */
     protected $number = 3;
 
@@ -21,6 +22,7 @@ class Idea
      * Gets a non-public property of the object.
      *
      * @param string $property
+     *
      * @return void
      */
     public function __get($property)
@@ -29,14 +31,13 @@ class Idea
         if (method_exists($this, $method)) {
             return $this->$method();
         }
-        return;
     }
 
     /**
      * Sets a non-public property of the object.
      *
      * @param string $property
-     * @param mixed $value
+     * @param mixed  $value
      */
     public function __set($property, $value)
     {
@@ -50,7 +51,8 @@ class Idea
      * Calls a non-public method of the object.
      *
      * @param string $methodName
-     * @param mixed $args
+     * @param mixed  $args
+     *
      * @return void
      */
     public function __call($methodName, $args)
@@ -58,7 +60,7 @@ class Idea
         $method = "set{$methodName}";
 
         if (method_exists($this, $method)) {
-            return $this->$method( func_get_args()[1][0] );
+            return $this->$method(func_get_args()[1][0]);
         }
     }
 
@@ -85,7 +87,7 @@ class Idea
     /**
      * Returns the number of the idea.
      *
-     * @return integer
+     * @return int
      */
     protected function getNumber()
     {
@@ -97,6 +99,7 @@ class Idea
      * Returns the object for method chaining.
      *
      * @param string $name
+     *
      * @return \GMH\Idea
      */
     protected function setName($name)
@@ -107,6 +110,7 @@ class Idea
                 $this->name = $name;
             }
         }
+
         return $this;
     }
 
@@ -115,13 +119,15 @@ class Idea
      * Returns the object for method chaining.
      *
      * @param int $number
+     *
      * @return \GMH\Idea
      */
     protected function setNumber($number)
     {
         if (is_numeric($number)) {
-            $this->number = (int)$number;
+            $this->number = (int) $number;
         }
+
         return $this;
     }
 }
