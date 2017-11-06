@@ -2,7 +2,7 @@
 
 namespace GMH;
 
-class DbInsertException extends \Exception
+class DbInsertException extends \PDOException
 {
     //
 }

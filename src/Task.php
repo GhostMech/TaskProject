@@ -23,9 +23,16 @@ class Task implements TaskInterface
     /**
      * The due date of the task.
      *
-     * @var [type]
+     * @var string
      */
     private $dueDate;
+
+    public function __get($property)
+    {
+        if (property_exists($this, $property)) {
+            return $this->$property;
+        }
+    }
 
     /**
      * Set the task name.
