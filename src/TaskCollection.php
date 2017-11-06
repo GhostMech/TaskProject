@@ -2,6 +2,10 @@
 
 namespace GMH;
 
+use GMH\DbInsertException;
+use GMH\DbSelectException;
+
+
 require_once 'Task.php';
 
 require_once 'DBInsertException.php';
@@ -38,7 +42,7 @@ class TaskCollection implements \Countable
     }
 
     /**
-     * Adds a task to the collection.
+     * Add a task to the collection.
      * Returns the object for method chaining.
      *
      * @param TaskInterface $task
@@ -57,17 +61,22 @@ class TaskCollection implements \Countable
     }
 
     /**
-     * Gets the "last inserted" id number from the database.
+     * Get the "last inserted" id number from the database.
      *
      * @return string
      */
     public function getIdFromDb()
     {
-        return $this->pdo->lastInsertId();
+        try {
+            return $this->pdo->lastInsertId();
+        } catch (PDOException $e) {
+            
+            echo $e->getMessage();
+        }
     }
 
     /**
-     * Remove a task.
+     * Remove a task from the collection.
      *
      * @param int $id
      *
@@ -82,7 +91,7 @@ class TaskCollection implements \Countable
     }
 
     /**
-     * Removes a task from the database.
+     * Remove a task from the database.
      *
      * @param mixed $id
      *
@@ -96,13 +105,11 @@ class TaskCollection implements \Countable
             $stmt1->execute([':id' => $id]);
             $removedTask = $stmt1->fetch();
 
-            var_dump($removedTask);
-
             $stmt2 = $this->pdo->prepare('DELETE FROM tasks WHERE id=:id');
             $stmt2->execute([':id' => $id]);
 
             return $removedTask;
-        } catch (\PDOException $e) {
+        } catch (\DbDeleteException $e) {
             echo $e->getMessage();
         }
     }
@@ -114,34 +121,53 @@ class TaskCollection implements \Countable
      */
     public function getAllTasks()
     {
-        if (isset($this->tasks)) {
-            $this->tasks = [];
-        }
-        $sql = 'SELECT id, name, due_date as dueDate FROM tasks';
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->setFetchMode(\PDO::FETCH_CLASS, '\GMH\Task');
-        $stmt->execute();
+        $this->tasks = $this->dbSelect($fields = ['id', 'name', 'due_date']);
 
-        while ($task = $stmt->fetch()) {
-            $this->tasks[] = $task;
-        }
+     //   return $this->tasks;
+    }
 
-        return $this->tasks;
+    private function dbSelect(array $fields = ['id', 'name', 'due_date'])
+    {
+        try {
+
+            $results = [];
+            $sql = 'SELECT id, name, due_date as dueDate FROM tasks';
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->setFetchMode(\PDO::FETCH_CLASS, '\GMH\Task');
+            $stmt->execute();
+
+            while ($task = $stmt->fetch()) {
+                $results[] = $task;
+            }
+
+            return $results;
+
+        } catch (\DbSelectException $e) {
+            echo $e->getMessage();
+        }
     }
 
     /**
-     * Inserts a task into the database.
+     * Insert a task into the database.
      *
      * @param \GMH\Task $task
      *
      * @return void
      */
-    private function dbInsert(Task $task)
+    private function dbInsert(TaskInterface $task)
     {
-        if (is_null($task->getId())) {
-            $sql = 'INSERT INTO tasks values(null, :name, :dueDate)';
+        try {
+            
+            if (is_null($task->getId())) {
+                $sql = 'INSERT INTO tasks values(null, :name, :dueDate)';
+                $stmt = $this->pdo->prepare($sql);
+                $stmt->execute([
+                    ':name' => $task->getName(), 
+                    ':dueDate' => $task->getDueDate()
+                ]);
+            }
+        } catch (DbInsertException $e) {
+            echo $e->getMessage;
         }
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->execute([':name' => $task->getName(), ':dueDate' => $task->getDueDate()]);
     }
 }
