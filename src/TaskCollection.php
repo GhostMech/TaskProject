@@ -126,7 +126,7 @@ class TaskCollection implements \Countable
      //   return $this->tasks;
     }
 
-    private function dbSelect(array $fields = ['id', 'name', 'due_date'])
+    private function dbSelect(array $fields)
     {
         try {
 
