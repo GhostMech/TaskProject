@@ -2,13 +2,12 @@
 
 namespace GMH;
 
+use \PDO;
+use \PDOException;
 use GMH\DbInsertException;
 use GMH\DbSelectException;
-
-
-require_once 'Task.php';
-
-require_once 'DBInsertException.php';
+use GMH\DbDeleteException;
+use GMH\TaskInterface;
 
 class TaskCollection implements \Countable
 {
@@ -26,7 +25,7 @@ class TaskCollection implements \Countable
      */
     private $pdo;
 
-    public function __construct(\PDO $pdo)
+    public function __construct(PDO $pdo)
     {
         $this->pdo = $pdo;
     }
@@ -109,7 +108,7 @@ class TaskCollection implements \Countable
             $stmt2->execute([':id' => $id]);
 
             return $removedTask;
-        } catch (\DbDeleteException $e) {
+        } catch (DbDeleteException $e) {
             echo $e->getMessage();
         }
     }
@@ -142,7 +141,7 @@ class TaskCollection implements \Countable
 
             return $results;
 
-        } catch (\DbSelectException $e) {
+        } catch (DbSelectException $e) {
             echo $e->getMessage();
         }
     }
