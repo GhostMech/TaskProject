@@ -69,7 +69,6 @@ class TaskCollection implements \Countable
         try {
             return $this->pdo->lastInsertId();
         } catch (PDOException $e) {
-            
             echo $e->getMessage();
         }
     }
@@ -121,14 +120,11 @@ class TaskCollection implements \Countable
     public function getAllTasks()
     {
         $this->tasks = $this->dbSelect($fields = ['id', 'name', 'due_date']);
-
-     //   return $this->tasks;
     }
 
     private function dbSelect(array $fields)
     {
         try {
-
             $results = [];
             $sql = 'SELECT id, name, due_date as dueDate FROM tasks';
             $stmt = $this->pdo->prepare($sql);
@@ -140,7 +136,6 @@ class TaskCollection implements \Countable
             }
 
             return $results;
-
         } catch (DbSelectException $e) {
             echo $e->getMessage();
         }
@@ -156,7 +151,6 @@ class TaskCollection implements \Countable
     private function dbInsert(TaskInterface $task)
     {
         try {
-            
             if (is_null($task->getId())) {
                 $sql = 'INSERT INTO tasks values(null, :name, :dueDate)';
                 $stmt = $this->pdo->prepare($sql);
