@@ -155,6 +155,7 @@ class TaskCollection implements \Countable
                 $sql = 'INSERT INTO tasks values(null, :name, :dueDate)';
                 $stmt = $this->pdo->prepare($sql);
                 $stmt->execute([
+                    
                     ':name' => $task->getName(), 
                     ':dueDate' => $task->getDueDate()
                 ]);
