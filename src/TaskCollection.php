@@ -120,22 +120,49 @@ class TaskCollection implements \Countable
     public function getAllTasks()
     {
         $this->tasks = $this->dbSelect($fields = ['id', 'name', 'due_date']);
+
+        return $this->tasks;
     }
 
-    private function dbSelect(array $fields)
+    /**
+     * Run a select query on the DB.
+     *
+     * @param array $fields
+     * @return array
+     */
+    public function dbSelect(array $fields = ['id', 'name', 'due_date']) // change BACK TO PRIVATE after testing!
     {
         try {
-            $results = [];
-            $sql = 'SELECT id, name, due_date as dueDate FROM tasks';
-            $stmt = $this->pdo->prepare($sql);
-            $stmt->setFetchMode(\PDO::FETCH_CLASS, '\GMH\Task');
-            $stmt->execute();
+            $dbFields = '';
 
-            while ($task = $stmt->fetch()) {
-                $results[] = $task;
+            foreach ($fields as $field) {
+                $dbFields .= $field . ', ';
             }
+            $dbFields = substr($dbFields, 0, -2);
+            var_dump($dbFields);
 
-            return $results;
+            $sql = "SELECT $dbFields FROM tasks";
+            $stmt = $this->pdo->prepare($sql);
+            if ($stmt !== false) {
+                $stmt->setFetchMode(\PDO::FETCH_CLASS, '\GMH\Task');
+                $stmt->execute();
+
+                $results = [];
+                while ($task = $stmt->fetch()) {
+                    $results[] = $task;
+                }
+
+                return $results;
+
+            } else {
+
+                $PDOerrorInfo = $this->pdo->errorInfo();
+                $errorString = '';
+                foreach ($PDOerrorInfo as $item) {
+                    $errorString .= $item . ' ';
+                }
+                throw new DbSelectException('<b>GMH\DbSelectException:</b> ' . $errorString);
+            }
         } catch (DbSelectException $e) {
             echo $e->getMessage();
         }
