@@ -130,18 +130,20 @@ class TaskCollection implements \Countable
      * @param array $fields
      * @return array
      */
-    public function dbSelect(array $fields = ['id', 'name', 'due_date']) // change BACK TO PRIVATE after testing!
+    private function dbSelect(array $dbFields = ['id', 'name', 'due_date'])
     {
         try {
-            $dbFields = '';
-
-            foreach ($fields as $field) {
-                $dbFields .= $field . ', ';
+            
+            $dbColumns = '';
+            foreach ($dbFields as $field) {
+                if ($field === 'due_date') {
+                    $field = 'due_date AS dueDate';
+                }
+                $dbColumns .= $field . ', ';
             }
-            $dbFields = substr($dbFields, 0, -2);
-            var_dump($dbFields);
+            $dbColumns = substr($dbColumns, 0, -2);
 
-            $sql = "SELECT $dbFields FROM tasks";
+            $sql = "SELECT $dbColumns FROM tasks";
             $stmt = $this->pdo->prepare($sql);
             if ($stmt !== false) {
                 $stmt->setFetchMode(\PDO::FETCH_CLASS, '\GMH\Task');
