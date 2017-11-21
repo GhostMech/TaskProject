@@ -117,6 +117,11 @@ class JsonStorage implements StorageInterface, Countable
         return false;
     }
 
+    /**
+     * Count the number of items in the internal array.
+     *
+     * @return int
+     */
     public function count()
     {
         if (is_array($this->jsonArray)) {
@@ -124,5 +129,15 @@ class JsonStorage implements StorageInterface, Countable
         }
 
         return 0;
+    }
+
+    /**
+     * Get the name of the JSON source file.
+     *
+     * @return string
+     */
+    public function getSourceFile()
+    {
+        return $this->sourceFile;
     }
 }
