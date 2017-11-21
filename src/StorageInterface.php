@@ -31,5 +31,5 @@ interface StorageInterface
      * @param $id
      * @return boolean
      */
-    public function delete($id);
+    public function delete($itemId);
 }
