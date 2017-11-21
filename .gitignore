@@ -1,3 +1,4 @@
 # Starter .gitignore file
 vendor/
 composer.lock
+.idea/
