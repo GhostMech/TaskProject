@@ -106,12 +106,12 @@ class JsonStorage implements StorageInterface, Countable
             foreach ($this->jsonArray as $key => $item) {
                 if ($item['id'] === $id) {
                     unset($this->jsonArray[$key]);
-
-                    return true;
                 }
             }
             file_put_contents($this->sourceFile, json_encode(array_values($this->jsonArray)));
             $this->__construct($this->sourceFile);
+            
+            return true;
         }
 
         return false;
