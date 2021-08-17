@@ -13,7 +13,7 @@
     ],
     "require": {
         "php": "^7.1",
-        "nesbot/carbon": "^1.22"
+        "nesbot/carbon": "^2"
     },
     "repositories": [
         {
